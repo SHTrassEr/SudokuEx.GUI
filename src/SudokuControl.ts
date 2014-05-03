@@ -6,6 +6,7 @@ module SudokuEx.GUI {
     export class SudokuControl implements ISudokuControl {
         private fieldElement: HTMLElement;
         private cells: ISudokuCell[];
+        private cellsCount: number;
 
         private sudokuFieldClass = "sudokuField";
         private dimensionClass = "dimension";
@@ -14,14 +15,25 @@ module SudokuEx.GUI {
             this.checkDimension(dimension);
             this.fieldElement = this.createFieldElement(dimension);
             var maxValue = dimension * dimension;
-            var cellsCount = maxValue * maxValue;
+            this.cellsCount = maxValue * maxValue;
+            this.cells = new Array<ISudokuCell>(this.cellsCount);
 
-            for (var i = 0; i < cellsCount; i++) {
+            for (var i = 0; i < this.cellsCount; i++) {
                 var cell = new SudokuCell(dimension, i);
+                this.cells[i] = cell;
                 this.fieldElement.appendChild(cell.getCellElement());
             }
 
             container.appendChild(this.fieldElement);
+        }
+
+        public fieldToString(): string {
+            var s = "";
+            for (var i = 0; i < this.cellsCount; i++) {
+                s += this.cells[i].getValueString();
+            }
+
+            return s;
         }
 
         private checkDimension(dimension: number): void {

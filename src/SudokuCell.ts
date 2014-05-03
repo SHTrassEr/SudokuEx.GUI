@@ -22,8 +22,8 @@ module SudokuEx.GUI {
         private maxValue: number;
         constructor(private dimension: number, private index: number) {
             this.maxValue = dimension * dimension;
-            this.colIndex = index % this.maxValue + 1;
-            this.rowIndex = Math.floor(index / this.maxValue) + 1;
+            this.colIndex = SudokuEx.Base.SudokuIndexUtils.getColIndex(this.maxValue, index);
+            this.rowIndex = SudokuEx.Base.SudokuIndexUtils.getRowIndex(this.maxValue, index); 
             this.borderClass = this.getBorderClass();
             this.input = this.createInputElement();
             this.element = this.createElement(this.input);
@@ -36,6 +36,14 @@ module SudokuEx.GUI {
         public setValue(value: number): void {
             var c = SudokuEx.Base.SudokuUtils.getCharFromValue(value);
             this.input.value = String.fromCharCode(c);
+        }
+
+        public getValueString(): string {
+            if (this.input.value) {
+                return this.input.value;
+            }
+
+            return "0";
         }
 
         public getValue(): number {
@@ -55,7 +63,7 @@ module SudokuEx.GUI {
         }
 
         private getBorderRightClass(): string {
-            if (((this.index + 1) % this.maxValue != 0) && ((this.index + 1) % this.dimension == 0)) {
+            if (((this.colIndex + 1) % this.maxValue != 0) && ((this.colIndex + 1) % this.dimension == 0)) {
                 return " " + this.borderRightClass;
             }
 
@@ -63,7 +71,7 @@ module SudokuEx.GUI {
         }
 
         private getBorderLeftClass(): string {
-            if ((this.index % this.maxValue != 0) && (this.index  % this.dimension == 0)) {
+            if ((this.colIndex % this.maxValue != 0) && (this.colIndex  % this.dimension == 0)) {
                 return " " + this.borderLeftClass;
             }
 
@@ -71,7 +79,7 @@ module SudokuEx.GUI {
         }
 
         private getBorderBottomClass(): string {
-            if ((this.rowIndex % this.maxValue != 0) && (this.rowIndex % this.dimension == 0)) {
+            if (((this.rowIndex + 1) % this.maxValue != 0) && ((this.rowIndex + 1) % this.dimension == 0)) {
                 return " " + this.borderBottomClass;
             }
 
@@ -79,7 +87,7 @@ module SudokuEx.GUI {
         }
 
         private getBorderTopClass(): string {
-            if (((this.rowIndex - 1) % this.maxValue != 0) && ((this.rowIndex - 1) % this.dimension == 0)) {
+            if ((this.rowIndex % this.maxValue != 0) && (this.rowIndex % this.dimension == 0)) {
                 return " " + this.borderTopClass;
             }
 
