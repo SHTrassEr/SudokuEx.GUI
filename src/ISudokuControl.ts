@@ -1,0 +1,4 @@
+interface ISudokuControl {
+    
+
+}
